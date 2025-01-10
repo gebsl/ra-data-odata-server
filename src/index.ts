@@ -101,7 +101,7 @@ const ra_data_odata_server = async (
     propertyName: string,
     id: Identifier
   ) {
-    const type = resources[resource.toLowerCase()].Type.Property.find(
+    const type = resources[resource.toLowerCase()]?.Type?.Property?.find(
       (p) => p.Name == propertyName
     )?.Type;
     if (type === "Edm.Guid") {
@@ -418,7 +418,7 @@ const ra_data_odata_server = async (
         const client = await getClient();
         const es = client.getEntitySet<RecordType>(resource);
 
-        const results = params.ids.map((id) => 
+        const results = params.ids.map((id) =>
           es.delete(getproperty_identifier(resource, keyName, id))
         );
 
