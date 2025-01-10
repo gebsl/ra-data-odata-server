@@ -121,6 +121,16 @@ export function resource_id_mapper<ProviderType extends DataProvider>(
   };
 
   wrapper.update = (resource, params) => {
+    const id_name = id_map[resource.toLowerCase()];
+    if (id_name) {
+      params.data = rename_from_id(id_name, { id: params.id, ...params.data });
+      return dataProvider.update(resource, params).then((result) => {
+        return {
+          ...result,
+          data: rename_to_id(id_name, result.data),
+        };
+      });
+    }
     return dataProvider.update(resource, params);
   };
 
