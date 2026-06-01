@@ -201,10 +201,10 @@ const ra_data_odata_server = async (
           switch (operator) {
             case "q":
               filterExpression = client
-                  .newFilter()
-                  .property(`Contains(${fieldName},'${filterValue}')`)
-                  .eq(true)
-                  .build();
+                .newFilter()
+                .property(`Contains(${fieldName},'${filterValue}')`)
+                .eq(true)
+                .build();
               break;
             case "neq":
               filterExpression = filterBuilder.ne(filterValue).build();
@@ -270,10 +270,10 @@ const ra_data_odata_server = async (
               // this default filter was kept for compatibility reasons with
               // ra-data-odata-server@<=4.0.0
               filterExpression = client
-                  .newFilter()
-                  .property(`Contains(${filterName},'${filterValue}')`)
-                  .eq(true)
-                  .build();
+                .newFilter()
+                .property(`Contains(${filterName},'${filterValue}')`)
+                .eq(true)
+                .build();
               console.warn(`Operator "${operator}" is not supported`);
               break;
           }
@@ -335,6 +335,14 @@ const ra_data_odata_server = async (
         }
         if (params.filter.parent) {
           const odataParams = OData.newOptions().expand(params.target);
+          const expand: string[] = params.filter.expand || [];
+          if (expand.length > 0) {
+            const expandSet = new Set(expand);
+            const uniqueExpandFields = Array.from(expandSet);
+
+            odataParams.expand(uniqueExpandFields.map(getExpandString));
+          }
+
           const o = await getEntity<RecordType>(
             params.filter.parent,
             params.id,
