@@ -206,6 +206,13 @@ const ra_data_odata_server = async (
                 .eq(true)
                 .build();
               break;
+            case "nq":
+              filterExpression = client
+                .newFilter()
+                .property(`Contains(${fieldName},'${filterValue}')`)
+                .eq(false)
+                .build();
+              break;
             case "neq":
               filterExpression = filterBuilder.ne(filterValue).build();
               break;
